@@ -596,7 +596,7 @@ class ClassicGame:
                 if self.state == GameState.JOINING:
                     if self.time_left > 0:
                         self.time_left -= 1
-                        if self.time_left in (15, 30, 60):
+                        if self.time_left in {15, 30, 60}:
                             await self.send_message(f"{self.time_left}s left to /join.")
                     elif len(self.players) < self.min_players:
                         await self.send_message("Not enough players. Game terminated.")

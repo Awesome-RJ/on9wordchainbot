@@ -51,8 +51,7 @@ class BannedLettersGame(ClassicGame):
         )
 
     async def additional_answer_checkers(self, word: str, message: types.Message) -> bool:
-        used_banned_letters = sorted(set(word) & set(self.banned_letters))
-        if used_banned_letters:
+        if used_banned_letters := sorted(set(word) & set(self.banned_letters)):
             await message.reply(
                 f"_{word.capitalize()}_ contains banned letters "
                 f"({', '.join(c.upper() for c in used_banned_letters)}).",

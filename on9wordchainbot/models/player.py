@@ -41,11 +41,11 @@ class Player:
     async def create(cls, user: types.User) -> "Player":
         player = Player(user)
         if await has_star(user.id):  # Donation reward
-            player._name += " " + STAR
+            player._name += f" {STAR}"
         return player
 
     @classmethod
     async def vp(cls) -> "Player":
         vp = Player(await on9bot.me)
-        vp._name += " " + STAR
+        vp._name += f" {STAR}"
         return vp

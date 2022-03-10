@@ -83,8 +83,7 @@ async def cmd_sql(message: types.Message) -> None:
         return
 
     text = ["*" + " - ".join(res[0].keys()) + "*"]
-    for r in res:
-        text.append("`" + " - ".join(str(i) for i in r.values()) + "`")
+    text.extend("`" + " - ".join(str(i) for i in r.values()) + "`" for r in res)
     await message.reply("\n".join(text), allow_sending_without_reply=True)
 
 
@@ -115,11 +114,14 @@ async def inline_handler(inline_query: types.InlineQuery):
             results.append(
                 types.InlineQueryResultArticle(
                     id=str(uuid4()),
-                    title="Start " + mode.name,
+                    title=f"Start {mode.name}",
                     description=command,
-                    input_message_content=types.InputTextMessageContent(command)
+                    input_message_content=types.InputTextMessageContent(
+                        command
+                    ),
                 )
             )
+
         await inline_query.answer(results, is_personal=not text)
         return
 
@@ -181,13 +183,13 @@ async def error_handler(update: types.Update, error: TelegramAPIError) -> None:
     # Unimportant errors
     if isinstance(error, (BotKicked, BotBlocked, CantInitiateConversation, InvalidQueryID)):
         return
-    if isinstance(error, BadRequest) and str(error) in (
+    if isinstance(error, BadRequest) and str(error) in {
         "Have no rights to send a message",
         "Not enough rights to send text messages to the chat",
         "Group chat was deactivated",
         "Chat_write_forbidden",
-        "Channel_private"
-    ):
+        "Channel_private",
+    }:
         return
     if isinstance(error, Unauthorized):
         if str(error).startswith("Forbidden: bot is not a member"):
@@ -251,7 +253,7 @@ async def error_handler(update: types.Update, error: TelegramAPIError) -> None:
         GlobalState.games[group_id].state = GameState.KILLGAME
         await asyncio.sleep(2)
 
-        # If game is still not terminated
-        if group_id in GlobalState.games:
-            del GlobalState.games[group_id]
-            await update.message.reply("Game ended forcibly.", allow_sending_without_reply=True)
+    # If game is still not terminated
+    if group_id in GlobalState.games:
+        del GlobalState.games[group_id]
+        await update.message.reply("Game ended forcibly.", allow_sending_without_reply=True)

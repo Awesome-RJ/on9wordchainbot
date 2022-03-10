@@ -26,10 +26,7 @@ async def cmd_donate(message: types.Message) -> None:
         )
         return
 
-    arg = message.get_args()
-    if not arg:
-        await send_donate_msg(message)
-    else:
+    if arg := message.get_args():
         try:
             amt = int(Decimal(arg).quantize(Decimal("1.00")) * 100)
             assert amt > 0
@@ -50,6 +47,9 @@ async def cmd_donate(message: types.Message) -> None:
                 )
                 return
             raise
+
+    else:
+        await send_donate_msg(message)
 
 
 @dp.message_handler(CommandStart("donate"), ChatTypeFilter([types.ChatType.PRIVATE]))

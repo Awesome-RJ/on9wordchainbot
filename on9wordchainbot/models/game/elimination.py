@@ -60,20 +60,20 @@ class EliminationGame(ClassicGame):
             for i, p in enumerate(players, start=1):
                 line = f"{i}. {p.name}: {p.score}\n"
                 if p is show_player:
-                    line = "> " + line
+                    line = f"> {line}"
                 text += line
         elif players.index(show_player) <= 4 or players.index(show_player) >= len(players) - 5:
             # Player is in first or last 5 places, show those places
             for i, p in enumerate(players[:5], start=1):
                 line = f"{i}. {p.name}: {p.score}\n"
                 if p is show_player:
-                    line = "> " + line
+                    line = f"> {line}"
                 text += line
             text += "...\n"
             for i, p in enumerate(players[-5:], start=len(players) - 4):
                 line = f"{i}. {p.name}: {p.score}\n"
                 if p is show_player:
-                    line = "> " + line
+                    line = f"> {line}"
                 text += line
         else:
             # Player not in first or last 5 places, show player in middle
